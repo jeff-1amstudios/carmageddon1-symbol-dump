@@ -1,0 +1,34 @@
+#
+# Dump symbol file to json.  Based on Open Watcom DIP Dumper.
+# 
+proj_name = jsonsymdump
+
+!ifndef jsonsymdump_autodepends
+jsonsymdump_autodepends = .AUTODEPEND
+!endif
+
+!include cproj.mif
+!include defrule.mif
+!include deftarg.mif
+
+dig_os_os2_386 = os2v2
+dig_os_dos_386 = dsx
+!ifndef dig_os_$(host_os)_$(host_cpu)
+dig_os = $(host_os)
+!else
+dig_os = $(dig_os_$(host_os)_$(host_cpu))
+!endif
+
+!include $(dig_dir)/dipcli.mif
+
+inc_dirs = -I"../h" -I"$(dig_dir)/h"
+
+.c: ../c;$(dig_srcs);$(mad_srcs)
+
+objs =  jsonsymdump.obj &
+        digcli.obj  &
+        dipcli.obj  &
+        $(dip_objs)
+        
+
+!include exetarg.mif
